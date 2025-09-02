@@ -146,7 +146,7 @@ class SSEParser:
         except TypeError as e:
             raise SSEParseError(f"Failed to create {chunk_type} chunk: {e}")
     
-    def parse_sse_stream(self, stream_lines: Iterator[str]) -> Iterator[UIMessageChunk]:
+    def parse_sse_stream(self, stream_lines: Iterator[str] | Iterator[bytes]) -> Iterator[UIMessageChunk]:
         """
         Parse an SSE stream and yield UIMessageChunk objects.
         
@@ -160,7 +160,7 @@ class SSEParser:
             SSEParseError: If parsing fails
         """
         for line in stream_lines:
-            event = self.parse_sse_line(line)
+            event = self.parse_sse_line(str(line))
             if event and event.data:
                 # Check for [DONE] marker
                 if event.data.strip() == '[DONE]':

@@ -9,3 +9,4 @@ if __name__ == "__main__":
     message, processor = sse_stream_to_message(sse_data)
     with open('./result.json', 'w') as f:
         f.write(json.dumps(message.to_dict(), indent=2))
+

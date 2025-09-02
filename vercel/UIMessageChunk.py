@@ -68,10 +68,7 @@ class ToolInputDeltaChunk:
     """Chunk containing incremental tool input text."""
     type: Literal['tool-input-delta'] = 'tool-input-delta'
     toolCallId: str = ""
-    toolName: str = ""
     inputTextDelta: str = ""
-    providerMetadata: Optional[ProviderMetadata] = None
-    dynamic: Optional[bool] = None
 
 
 @dataclass
@@ -92,7 +89,9 @@ class ToolInputErrorChunk:
     type: Literal['tool-input-error'] = 'tool-input-error'
     toolCallId: str = ""
     toolName: str = ""
+    input: Any = None
     errorText: str = ""
+    providerExecuted: Optional[bool] = None
     providerMetadata: Optional[ProviderMetadata] = None
     dynamic: Optional[bool] = None
 
@@ -200,6 +199,7 @@ class DataChunk(Generic[DATA_TYPES]):
     """Chunk containing custom data."""
     type: str  # Will be 'data-{type}' format
     data: DATA_TYPES = None
+    transient: Optional[bool] = None
     providerMetadata: Optional[ProviderMetadata] = None
 
     def __post_init__(self):
@@ -214,14 +214,13 @@ class StartChunk:
     type: Literal['start'] = 'start'
     messageId: Optional[str] = None
     messageMetadata: Optional[Any] = None
-    providerMetadata: Optional[ProviderMetadata] = None
 
 
 @dataclass
 class FinishChunk:
     """Chunk indicating finish of message generation."""
     type: Literal['finish'] = 'finish'
-    providerMetadata: Optional[ProviderMetadata] = None
+    messageMetadata: Optional[Any] = None
 
 
 @dataclass

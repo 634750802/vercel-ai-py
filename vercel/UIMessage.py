@@ -41,7 +41,7 @@ class BaseUIPart(ABC):
     def type(self) -> str:
         """Return the type identifier for this part."""
         pass
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert the part to a dictionary for JSON serialization."""
         result = asdict(self)
@@ -104,8 +104,6 @@ class DynamicToolUIPart(BaseUIPart):
     @property
     def type(self) -> str:
         return 'dynamic-tool'
-
-
 
 
 @dataclass
@@ -200,7 +198,7 @@ class UIMessage(Generic[METADATA, DATA_PARTS, TOOLS]):
     role: Role
     parts: List[UIMessagePart]
     metadata: Optional[METADATA] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert the message to a dictionary for JSON serialization."""
         result = {
@@ -212,6 +210,13 @@ class UIMessage(Generic[METADATA, DATA_PARTS, TOOLS]):
         if self.metadata is not None:
             result['metadata'] = self.metadata
         return result
+
+    def as_text_content(self) -> str:
+        """
+        Return the text part of the message.
+        :return:
+        """
+        return ''.join(map(lambda part: part.text if isinstance(part, TextUIPart) else '', self.parts))
 
 
 # Utility functions for working with UI message parts
@@ -325,7 +330,7 @@ def create_tool_message(
         role=role,
         parts=[ToolUIPart(
             toolCallId="default-call-id",
-            toolName=tool_name, 
+            toolName=tool_name,
             state="output-available",
             args=args,
             result=result
