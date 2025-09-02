@@ -46,7 +46,8 @@ class BaseUIPart(ABC):
         """Convert the part to a dictionary for JSON serialization."""
         result = asdict(self)
         result['type'] = self.type
-        return result
+        # Remove None/null values
+        return {k: v for k, v in result.items() if v is not None}
 
 
 @dataclass
@@ -202,12 +203,15 @@ class UIMessage(Generic[METADATA, DATA_PARTS, TOOLS]):
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert the message to a dictionary for JSON serialization."""
-        return {
+        result = {
             'id': self.id,
             'role': self.role,
-            'parts': [part.to_dict() for part in self.parts],
-            'metadata': self.metadata
+            'parts': [part.to_dict() for part in self.parts]
         }
+        # Only include metadata if it's not None
+        if self.metadata is not None:
+            result['metadata'] = self.metadata
+        return result
 
 
 # Utility functions for working with UI message parts
