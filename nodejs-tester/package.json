@@ -1,0 +1,16 @@
+{
+  "name": "nodejs-tester",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node diff.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ai": "^5.0.29",
+    "json-diff-kit": "^1.0.33"
+  }
+}

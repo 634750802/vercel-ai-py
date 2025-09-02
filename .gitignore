@@ -1,0 +1,7 @@
+.env
+.bashrc
+.venv
+nodejs-tester/node_modules
+result.json
+standard.json
+.claude
